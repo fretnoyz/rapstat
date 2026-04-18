@@ -1,0 +1,20 @@
+[package]
+name = "rapstat"
+version = "0.1.0"
+edition = "2024"
+
+[[bin]]
+name = "rapstat"
+path = "src/main.rs"
+
+[dependencies]
+clap = { version = "4", features = ["derive"] }
+git2 = "0.19"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+toml = "0.8"
+walkdir = "2"
+chrono = { version = "0.4", features = ["serde"] }
+dirs = "5"
+anyhow = "1"
+colored = "2"
