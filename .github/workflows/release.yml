@@ -1,0 +1,71 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-macos:
+    name: Build (aarch64-apple-darwin)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-darwin
+
+      - name: Build release binary
+        run: cargo build --release --target aarch64-apple-darwin
+
+      - name: Stage artifact
+        run: cp target/aarch64-apple-darwin/release/rapstat rapstat-aarch64-apple-darwin
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rapstat-aarch64-apple-darwin
+          path: rapstat-aarch64-apple-darwin
+
+  build-linux:
+    name: Build (x86_64-unknown-linux-gnu)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install system dependencies
+        run: sudo apt-get update && sudo apt-get install -y cmake pkg-config libssl-dev
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-unknown-linux-gnu
+
+      - name: Build release binary
+        run: cargo build --release --target x86_64-unknown-linux-gnu
+
+      - name: Stage artifact
+        run: cp target/x86_64-unknown-linux-gnu/release/rapstat rapstat-x86_64-unknown-linux-gnu
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rapstat-x86_64-unknown-linux-gnu
+          path: rapstat-x86_64-unknown-linux-gnu
+
+  release:
+    name: Create GitHub Release
+    needs: [build-macos, build-linux]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+
+      - name: Attach binaries to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            rapstat-aarch64-apple-darwin/rapstat-aarch64-apple-darwin
+            rapstat-x86_64-unknown-linux-gnu/rapstat-x86_64-unknown-linux-gnu
