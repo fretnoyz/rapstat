@@ -47,6 +47,8 @@ pub struct ContextMdInfo {
     pub status: ContextMdStatus,
     pub last_modified: Option<DateTime<Utc>>,
     pub discrepancies: Vec<String>,
+    /// Relative path used: "CONTEXT.md" or "raptor/CONTEXT.md"
+    pub resolved_path: Option<String>,
 }
 
 pub struct StatusDoc {
@@ -133,6 +135,9 @@ impl StatusDoc {
     fn write_context_md_section(&self, out: &mut impl Write) -> Result<()> {
         writeln!(out, "## CONTEXT.md")?;
         writeln!(out, "- Status: {}", self.context_md.status)?;
+        if let Some(ref p) = self.context_md.resolved_path {
+            writeln!(out, "- Path: {}", p)?;
+        }
         match self.context_md.last_modified {
             Some(t) => writeln!(out, "- Last modified: {}", t.to_rfc3339())?,
             None => writeln!(out, "- Last modified: n/a")?,
