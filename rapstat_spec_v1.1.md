@@ -29,7 +29,7 @@ Rapstat provides an independent, objective record of what is actually happening 
 - **One job.** Rapstat observes and records. It does not orchestrate, execute, report, or decide.
 - **Independent observer.** Rapstat is not part of Raptor's execution chain. It watches Raptor. An agent cannot influence its own observer.
 - **Never blocks work.** All hooks are non-blocking. A Rapstat failure never prevents a commit or push.
-- **CONTEXT.md stub creation only.** Rapstat will not modify an existing CONTEXT.md. If no CONTEXT.md is found, rapstat creates a minimal stub in the correct location: `raptor/context/CONTEXT.md` for Raptor-managed projects (detected by the presence of a `raptor/` directory), `CONTEXT.md` at the project root otherwise.
+- **Reads CONTEXT.md, never writes it.** Rapstat may flag drift but does not modify agent-owned files.
 - **STATUS.md is Rapstat's sole write target.** One writer, no conflicts.
 - **Deterministic output.** Given the same repo state, Rapstat produces the same STATUS.md. No LLM calls in the critical path.
 - **Facts only.** Rapstat records observable facts. Interpretation is the responsibility of the reporting layer.
@@ -243,7 +243,7 @@ Hooks are stored in `.rapstat/hooks/` and tracked by git. `rapstat init` symlink
 - Reporting, interpretation, or summarization — Rapstat writes facts, a separate tool reads them
 - Central store aggregation or transport — a downstream tool owns that
 - LLM-generated content of any kind in the critical path
-- Writing or modifying an existing CONTEXT.md under any condition
+- Writing or modifying CONTEXT.md under any condition
 - Inter-agent coordination or orchestration
 - Daemon/long-running process — use cron or equivalent
 - Any UI — Rapstat has no display layer

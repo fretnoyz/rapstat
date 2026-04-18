@@ -23,7 +23,8 @@ pub fn run() -> Result<()> {
             }
         }
         ContextMdStatus::Missing => {
-            println!("{}", "CONTEXT.md missing and could not be created".red().bold());
+            println!("{}", "CONTEXT.md missing".red().bold());
+            println!("  Expected at: raptor/context/CONTEXT.md or CONTEXT.md");
         }
     }
 
