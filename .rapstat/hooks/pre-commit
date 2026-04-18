@@ -1,0 +1,8 @@
+#!/bin/sh
+# rapstat pre-commit hook
+# Writes STATUS.md with trigger=commit and stages it.
+# Non-blocking: always exits 0.
+
+rapstat scan --trigger commit || true
+git add STATUS.md 2>/dev/null || true
+exit 0

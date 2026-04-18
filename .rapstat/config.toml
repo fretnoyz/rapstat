@@ -1,0 +1,10 @@
+[project]
+name = "rapstat"
+
+[hooks]
+pre_commit = true
+pre_push = true
+
+[validation]
+check_context_md = true
+flag_only = true

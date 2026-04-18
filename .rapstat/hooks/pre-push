@@ -1,0 +1,7 @@
+#!/bin/sh
+# rapstat pre-push hook
+# Writes STATUS.md with trigger=push (includes full commit metadata and contributors).
+# Non-blocking: always exits 0.
+
+rapstat scan --trigger push || true
+exit 0
