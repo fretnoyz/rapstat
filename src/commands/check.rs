@@ -23,8 +23,7 @@ pub fn run() -> Result<()> {
             }
         }
         ContextMdStatus::Missing => {
-            println!("{}", "CONTEXT.md missing".red().bold());
-            println!("  Create CONTEXT.md at the project root.");
+            println!("{}", "CONTEXT.md missing and could not be created".red().bold());
         }
     }
 
