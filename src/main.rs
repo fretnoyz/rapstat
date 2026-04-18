@@ -1,5 +1,6 @@
 mod commands;
 mod config;
+mod context_check;
 mod git;
 mod status_model;
 

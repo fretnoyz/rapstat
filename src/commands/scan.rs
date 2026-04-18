@@ -1,13 +1,13 @@
 use anyhow::Result;
-use chrono::{DateTime, Utc};
+use chrono::Utc;
 use clap::ValueEnum;
 use std::io::BufWriter;
-use std::path::Path;
 
 use crate::{
     config::Config,
+    context_check,
     git,
-    status_model::{ContextMdInfo, ContextMdStatus, StatusDoc, Trigger},
+    status_model::{StatusDoc, Trigger},
 };
 
 #[derive(Debug, Clone, ValueEnum)]
@@ -31,7 +31,7 @@ pub fn run(trigger: TriggerArg) -> Result<()> {
         TriggerArg::Scan => Trigger::Scan,
     };
 
-    let context_md = inspect_context_md(&project_root, &repo_info)?;
+    let context_md = context_check::inspect(&project_root, &repo_info)?;
 
     let doc = StatusDoc {
         project: config.project.name,
@@ -48,39 +48,6 @@ pub fn run(trigger: TriggerArg) -> Result<()> {
     doc.write(&mut writer)?;
 
     Ok(())
-}
-
-fn inspect_context_md(project_root: &Path, repo_info: &git::RepoInfo) -> Result<ContextMdInfo> {
-    let context_path = project_root.join("CONTEXT.md");
-
-    if !context_path.exists() {
-        return Ok(ContextMdInfo {
-            status: ContextMdStatus::Missing,
-            last_modified: None,
-            discrepancies: vec!["CONTEXT.md not found".to_string()],
-        });
-    }
-
-    let metadata = std::fs::metadata(&context_path)?;
-    let last_modified: DateTime<Utc> = metadata.modified()?.into();
-
-    // Drift: CONTEXT.md has not been touched since the last commit.
-    let (status, discrepancies) = if last_modified < repo_info.last_commit.timestamp {
-        let msg = format!(
-            "CONTEXT.md last modified {} but last commit was {}",
-            last_modified.to_rfc3339(),
-            repo_info.last_commit.timestamp.to_rfc3339()
-        );
-        (ContextMdStatus::DriftDetected, vec![msg])
-    } else {
-        (ContextMdStatus::Ok, vec![])
-    };
-
-    Ok(ContextMdInfo {
-        status,
-        last_modified: Some(last_modified),
-        discrepancies,
-    })
 }
 
 fn hostname() -> String {
