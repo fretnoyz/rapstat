@@ -82,6 +82,23 @@ Integration with downstream ingest/reporting tool that will consume STATUS.md fi
 
 - Spec: v1.2 (finalized)
 - Sprint 1: **complete** — all four tranches shipped
-- Binary: installed at `~/.cargo/bin/rapstat`, hooks operational
-- Release workflow: triggers on `v*` tag push, produces binaries for both targets
-- Next: test on remaining machines, cut `v0.1.0` tag
+- v0.1.0 tagged and released; GitHub Actions workflow live
+- Binary installed: MacBook Pro (primary) ✓, MacBook Pro (getchkd) ✓
+- Binary NOT YET installed: System76 Linux, redteam1
+
+## Next Steps
+
+1. **Install rapstat on remaining machines**
+   - System76 Linux: `cargo install --git https://github.com/fretnoyz/rapstat --force`
+   - redteam1: same
+   - Run `rapstat init` in each active project on those machines after install
+
+2. **Init rapstat in all active projects on all machines**
+   - For each project: `cd /path/to/project && rapstat init`
+   - Confirm hooks fire on next commit in each project
+
+3. **Spec out the status reporter (separate project)**
+   - Consumes STATUS.md files from registered projects/machines
+   - Also reads CONTEXT.md for human context
+   - Produces human-readable summary across all tracked projects
+   - Design TBD — start with a spec session similar to this one
