@@ -89,27 +89,12 @@ Integration with downstream ingest/reporting tool that will consume STATUS.md fi
 - v0.1.0 tagged and released; GitHub Actions workflow live
 - Binary installed: MacBook Pro (primary) ✓, MacBook Pro (getchkd) ✓
 - Binary NOT YET installed: System76 Linux, redteam1
-- rapview v0.1.0 built and pushed — not yet installed or tested end-to-end
+- rapview v0.1.0 running on primary MacBook (127.0.0.1:7474) ✓
 - Multi-root workspace: `rapstat/rapstat.code-workspace` covers both repos
 
 ## Next Steps
 
-1. **Install rapstat on remaining machines**
-   - System76 Linux: `sudo apt install -y libssl-dev pkg-config cmake zlib1g-dev && cargo install --git https://github.com/fretnoyz/rapstat --force`
-   - redteam1: same (use `apt update --fix-missing` if cmake 404s)
-   - Run `rapstat init` in each active project on those machines after install
-
-2. **Init rapstat in all active projects on all machines**
-   - For each project: `cd /path/to/project && rapstat init`
-   - Confirm hooks fire on next commit in each project
-
-3. **Install and test rapview on primary MacBook**
-   - `cd ~/Documents/repos/rapview && python -m venv .venv && source .venv/bin/activate && pip install -e .`
-   - Run `rapview` once to get config template, create `~/.rapview/config.toml`
-   - Test localhost-only first (mbp-primary as 127.0.0.1)
-   - Known issues to fix before first run: body parser for git metrics, missing `origin` field (see rapview CONTEXT.md)
-
-4. **Add remote machines to rapview config once local test passes**
+1. **Add remote machines to rapview config once local test passes**
    - Consumes STATUS.md files from registered projects/machines
    - Also reads CONTEXT.md for human context
    - Produces human-readable summary across all tracked projects
