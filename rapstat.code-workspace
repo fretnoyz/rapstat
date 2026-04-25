@@ -5,6 +5,12 @@
 		},
 		{
 			"path": "../rapview"
+		},
+		{
+			"path": "../coolscreen"
+		},
+		{
+			"path": "../raptor-toolkit"
 		}
 	],
 	"settings": {}

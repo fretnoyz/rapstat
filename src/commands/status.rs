@@ -34,17 +34,24 @@ fn print_status(content: &str) {
     println!();
 
     // Print body sections, highlighting headers and flagging drift.
+    let mut in_discrepancies = false;
     for line in body.lines() {
         if line.starts_with("## ") {
+            in_discrepancies = false;
             println!("{}", line.bold().cyan());
         } else if line.contains("drift_detected") || line.contains("missing") {
+            in_discrepancies = false;
             println!("{}", line.yellow());
         } else if line.contains("Discrepancies:") && !line.contains("none") {
+            in_discrepancies = true;
             println!("{}", line.yellow());
-        } else if line.starts_with("  - ") {
+        } else if line.starts_with("  - ") && in_discrepancies {
             // Discrepancy bullet under a flagged section.
             println!("{}", line.red());
         } else {
+            if line.starts_with("- ") {
+                in_discrepancies = false;
+            }
             println!("{}", line);
         }
     }

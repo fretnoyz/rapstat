@@ -98,7 +98,7 @@ pub fn scan_all() -> Result<()> {
         config::Config,
         context_check,
         git,
-        status_model::{StatusDoc, Trigger},
+        status_model::{StatusDoc, Trigger, WorkflowWipStatus},
     };
     use std::io::BufWriter;
 
@@ -128,6 +128,7 @@ pub fn scan_all() -> Result<()> {
                 updated_at: Utc::now(),
                 repo: repo_info,
                 context_md,
+                workflow_wip: WorkflowWipStatus::load(root),
             };
 
             let status_path = root.join("STATUS.md");

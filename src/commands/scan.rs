@@ -7,7 +7,7 @@ use crate::{
     config::Config,
     context_check,
     git,
-    status_model::{StatusDoc, Trigger},
+    status_model::{StatusDoc, Trigger, WorkflowWipStatus},
 };
 
 #[derive(Debug, Clone, ValueEnum)]
@@ -40,6 +40,7 @@ pub fn run(trigger: TriggerArg) -> Result<()> {
         updated_at: Utc::now(),
         repo: repo_info,
         context_md,
+        workflow_wip: WorkflowWipStatus::load(&project_root),
     };
 
     let status_path = project_root.join("STATUS.md");
